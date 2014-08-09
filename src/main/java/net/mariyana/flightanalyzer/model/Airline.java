@@ -11,17 +11,31 @@ public class Airline implements Comparable {
 
         @Override
         public int compare(Airline airline, Airline airline2) {
-            if (airline.getDistanceOfAirlineFLights() < airline2.getDistanceOfAirlineFLights())
+            if (airline.getMileage() < airline2.getMileage())
                 return -1;
-            if (airline.getDistanceOfAirlineFLights() > airline2.getDistanceOfAirlineFLights())
+            if (airline.getMileage() > airline2.getMileage())
                 return 1;
 
             return 0;
         }
     };
 
+    public static final Comparator<Airline> BY_DISTANCE_ASC_NAME_DESC = new Comparator<Airline>() {
+
+        @Override
+        public int compare(Airline airline, Airline airline2) {
+
+            int compare = BY_DISTANCE_ASC.compare(airline, airline2);
+            if (compare == 0)
+                return airline2.getName().compareTo(airline.getName());
+
+            return compare;
+        }
+    };
+
     private String name;
     private String id;
+    private float mileage = 0f;
 
     public Airline(String airlineId, String name) {
         this.id = airlineId;
@@ -36,18 +50,21 @@ public class Airline implements Comparable {
         return name;
     }
 
-    public int getDistanceOfAirlineFLights() {
+    public float getMileage() {
+        return mileage;
+    }
 
-        return 0;
+    public void setMileage(float mileage) {
+        this.mileage = mileage;
     }
 
     @Override
     public int compareTo(Object o) {
         if (!(o instanceof Airline))
             return -2;
-        if (this.getDistanceOfAirlineFLights() < ((Airline) o).getDistanceOfAirlineFLights())
+        if (this.getMileage() < ((Airline) o).getMileage())
             return -1;
-        if (this.getDistanceOfAirlineFLights() > ((Airline) o).getDistanceOfAirlineFLights())
+        if (this.getMileage() > ((Airline) o).getMileage())
             return 1;
 
         return 0;

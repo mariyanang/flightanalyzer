@@ -94,7 +94,6 @@ public class SchipholAnalyzer implements FlightAnalyzer {
         return totalSumKm / allFlightsDistances.size();
     }
 
-    //TODO
     @Override
     public String getSortedAirportsFromSchipholByDistance() throws IOException {
         List<Flight> flightsFromSchiphol = new ArrayList<Flight>();
@@ -118,43 +117,43 @@ public class SchipholAnalyzer implements FlightAnalyzer {
 
     @Override
     public List<Airline> getSortedAirlinesFlyingFromSchipholByMileage() throws IOException {
-        Map<Airline, Integer> map = new HashMap<Airline, Integer>();
+        ArrayList<Airline> result = new ArrayList<Airline>();
 
         for (Flight flight : flightDAO.getFlights()) {
             if (!flight.getDepartureAirport().getId().equals(Airport.ID_SCHIPHOL)) {
                 continue;
             }
 
-            if (!map.containsKey(flight.getAirline())) {
-                map.put(flight.getAirline(), 0);
+            if (!result.contains(flight.getAirline())) {
+                result.add(flight.getAirline());
             }
-            Integer currentAirlineMileage = map.get(flight.getAirline());
-            map.put(flight.getAirline(), currentAirlineMileage + flight.getDistance());
+            float currentAirlineMileage = flight.getAirline().getMileage();
+            flight.getAirline().setMileage(currentAirlineMileage + flight.getDistance());
         }
 
-        ArrayList<Airline> result = new ArrayList<Airline>();
-        for (Map.Entry<Airline, Integer> entry : map.entrySet()) {
-            Airline newAirline = entry.getKey();
-            Integer newMileage = entry.getValue();
+        Collections.sort(result, Airline.BY_DISTANCE_ASC_NAME_DESC);
 
-            int position = 0;
-            for (Airline airline : result) {
-                position = result.size();
-                Integer mileage = map.get(airline);
-                if (mileage > newMileage) {
-                    position = result.indexOf(airline);
-                    break;
-                }
-            }
-            result.add(position, newAirline);
-        }
+        //      Manual sorting mostly used for sorting primitives
+        //        for (Map.Entry<Airline, Integer> entry : map.entrySet()) {
+        //            Airline newAirline = entry.getKey();
+        //            Integer newMileage = entry.getValue();
+        //
+        //            int position = 0;
+        //            for (Airline airline : result) {
+        //                position = result.size();
+        //                Integer mileage = map.get(airline);
+        //                if (mileage > newMileage) {
+        //                    position = result.indexOf(airline);
+        //                    break;
+        //                }
+        //            }
+        //            result.add(position, newAirline);
+        //        }
 
         for (Airline airline : result) {
-            System.out.println(airline.getId() + ", " + map.get(airline) + ", " + airline.getName());
+            System.out.println(airline.getId() + ", " + airline.getMileage() + ", " + airline.getName());
         }
 
         return result;
     }
-
-
 }
