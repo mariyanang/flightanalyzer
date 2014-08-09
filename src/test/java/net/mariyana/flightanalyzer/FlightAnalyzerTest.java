@@ -71,8 +71,17 @@ public class FlightAnalyzerTest {
 
     @Test
     public void testSortedAirlinesFlyingFromSchipholByMileage() throws IOException {
-        List<Airline> flightsFromSchiphol = flightAnalyzer.getSortedAirlinesFlyingFromSchipholByMileage();
-//        Assert.assertTrue(flightsFromSchiphol.contains(EXPECTED_SORTED_AIRPORTS_BY_DISTANCE));
+        List<Airline> sortedAirlinesFromSchiphol = flightAnalyzer.getSortedAirlinesFlyingFromSchipholByMileage();
+        Airline previous = null;
+        for (Airline airline : sortedAirlinesFromSchiphol) {
+            if (previous != null) {
+                Assert.assertTrue(previous.getMileage() <= airline.getMileage());
+                if (previous.getMileage() == airline.getMileage()) {
+                    Assert.assertTrue(previous.getName().compareTo(airline.getName()) > 0);
+                }
+            }
+            previous = airline;
+        }
     }
 
     @Test
@@ -81,30 +90,4 @@ public class FlightAnalyzerTest {
         Airline a2 = new Airline("id1", "Dummy1");
         Assert.assertEquals(a1, a2);
     }
-
-//    @Test
-//    public void testAirportsSortedByIdAsc() throws IOException {
-//        AirportsFileDAO dao = new AirportsFileDAO();
-//        Airport previousAirport = null;
-//        for (Airport airport : dao.getAirportsSortedByIdAsc()) {
-//            if (previousAirport != null) {
-//                Assert.assertEquals(previousAirport.getId().compareToIgnoreCase(airport.getId()), -1);
-//            }
-//        }
-//    }
-//
-//
-//
-//    @Test
-//    public void testAirportsSortedByIdDesc() throws IOException {
-//        AirportsFileDAO dao = new AirportsFileDAO();
-//        Airport previousAirport = null;
-//        for (Airport airport : dao.getAirportsSortedByIdDesc()) {
-//            if (previousAirport != null) {
-//                Assert.assertEquals(previousAirport.getId().compareToIgnoreCase(airport.getId()), 1);
-//            }
-//        }
-//    }
-
-
 }
