@@ -94,6 +94,7 @@ public class SchipholAnalyzer implements FlightAnalyzer {
         return totalSumKm / allFlightsDistances.size();
     }
 
+    //TODO Add the printing of flights to PrintingSchipholAnalyzer
     @Override
     public String getSortedAirportsFromSchipholByDistance() throws IOException {
         List<Flight> flightsFromSchiphol = new ArrayList<Flight>();
@@ -149,10 +150,6 @@ public class SchipholAnalyzer implements FlightAnalyzer {
         //            }
         //            result.add(position, newAirline);
         //        }
-
-        for (Airline airline : result) {
-            System.out.println(airline.getId() + ", " + airline.getMileage() + ", " + airline.getName());
-        }
 
         return result;
     }
